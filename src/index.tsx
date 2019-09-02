@@ -2,22 +2,38 @@
  * @class ExampleComponent
  */
 
-import * as React from 'react'
+import { useState, ChangeEvent } from "react";
 
-import styles from './styles.css'
+type FormState = { [key: string]: any };
 
-export type Props = { text: string }
+export const useForm = (validation: { [key: string]: any }) => {
+  const [formState, setFormState] = useState<FormState>({});
+  const [errors, setErrors] = useState({});
 
-export default class ExampleComponent extends React.Component<Props> {
-  render() {
-    const {
-      text
-    } = this.props
+  const setFormItem = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.name) {
+      console.warn("name property is required!");
+      return;
+    }
+    const name = e.target.name;
+    const value = e.target.value;
 
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
-}
+    setFormState(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    setErrors(prev => ({
+      ...prev,
+      [name]: !(validation[name] || RegExp('.*')).test(value)
+    }));
+
+  };
+
+  return {
+    formState,
+    setFormItem,
+    errors,
+    setErrors
+  };
+};
