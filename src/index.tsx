@@ -1,7 +1,3 @@
-/**
- * @class ExampleComponent
- */
-
 import { useState, ChangeEvent } from "react";
 
 type FormState = { [key: string]: any };

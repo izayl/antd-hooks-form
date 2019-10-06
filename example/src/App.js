@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Form, Button, Input } from "antd";
 import { useForm } from "antd-hooks-form";
 import "antd/dist/antd.css";
@@ -17,6 +17,12 @@ export default () => {
     console.log("submit", formState);
   };
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    console.log("input", inputRef);
+  }, [formState.username]);
+
   return (
     <div className="App">
       <Form onSubmit={onSubmit}>
@@ -25,6 +31,7 @@ export default () => {
         <FormItem validateStatus={errors.username ? "error" : null}>
           <Input
             name="username"
+            ref={inputRef}
             placeholder="username"
             value={formState.username}
             onChange={setFormItem}
